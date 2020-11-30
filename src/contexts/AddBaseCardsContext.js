@@ -2,6 +2,8 @@ import React, {useEffect, useState, createRef} from 'react'
 import { useParams } from 'react-router-dom';
 import * as HtmlToImage from 'html-to-image';
 import download from 'downloadjs';
+import TemplateSilver from '../resources/sakata-template-common.png';
+import { style } from '../components/AddBaseCard';
 
 const AddBaseCardContext = React.createContext({});
 
@@ -11,9 +13,21 @@ const AddBaseCardProvider = component => {
     const [character, setCharacter] = useState({});
     const [picture, setPicture] = useState("");
     const [loading, setLoading] = useState(true);
+    const [overallPower, setOverallPower] = useState(99);
+    const [rarity, setRarity] = useState({
+        template: TemplateSilver,
+        fontStyle: style.silverFont
+    });
 
     const handlePicture = event => {
         setPicture(event.target.value)
+    };
+
+    const handleRarity = (template, fontStyle) => {
+        setRarity({
+            template: template,
+            fontStyle: fontStyle
+        });
     };
 
     useEffect(() => {
@@ -29,6 +43,20 @@ const AddBaseCardProvider = component => {
 
         return fetchCharacterData();
     }, [malId]);
+ 
+    const generateOverallPower = async () => {
+        setLoading(true);
+        const fetchOverallPower = async () => {
+            if (malId) {
+                const response = await fetch(`http://sakata.api.com/basecard/overallPower/${malId}`);
+                const json = await response.json();
+                setOverallPower(json.value);
+            }
+            setLoading(false);
+        }
+
+        fetchOverallPower();
+    }
 
     const saveCardAsPng = () => {
         HtmlToImage.toPng(sakataCardRef.current)
@@ -45,6 +73,8 @@ const AddBaseCardProvider = component => {
                 character,
                 picture,
                 handlePicture,
+                rarity,
+                handleRarity,
                 sakataCardRef,
                 saveCardAsPng
             }}
