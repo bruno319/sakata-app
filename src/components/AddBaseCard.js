@@ -1,24 +1,25 @@
-import { Container, Image, Row, Col, InputGroup, FormControl, Button, ButtonGroup, ButtonToolbar } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, FormControl, Image, InputGroup, ListGroup, Row } from "react-bootstrap";
 import { AddBaseCardContext, AddBaseCardProvider } from "../contexts/AddBaseCardsContext";
 import TemplateSilver from '../resources/sakata-template-common.png';
-import TemplateGold from '../resources/sakata-template.png';
 import TemplateEpic from '../resources/sakata-template-epic.png';
+import TemplateGold from '../resources/sakata-template.png';
+import TemplateLegend from '../resources/sakata-legend.png';
 
 export const style = {
     sakataCard: {
         position: 'relative',
-        height: '400px',
-        width: '293px'
+        height: '330px',
+        width: '250px'
     },
     overallPower: {
         position: 'absolute',
         bottom: '0px',
-        left: '10px',
+        left: '1px',
         height: '85px',
         width: '85px',
-        lineHeight: '0.49',
+        lineHeight: '0.95',
         textAlign: 'center',
-        fontSize: '91px',
+        fontSize: '70px',
         fontFamily: 'Jockey One'
     },
     name: {
@@ -27,31 +28,31 @@ export const style = {
         alignItems: 'center',
         justifyContent: 'center',
         bottom: '0px',
-        left: '115px',
-        fontSize: '35px',
+        left: '97px',
+        fontSize: '30px',
         fontFamily: 'Jockey One',
         textAlign: 'center',
         verticalAlign: 'middle',
         letterSpacing: '0px',
         lineHeight: '0.8',
-        width: '155px',
-        height: '78px',
+        width: '130px',
+        height: '62px',
     },
     silverFont: {
         color: '#ebebeb',
-        textShadow: "0 0 2px #ccc, 0 0 3px #ccc, 0 0 15px #111, 0 0 20px #111"
+        textShadow: "0 0 2px #ccc, 0 0 3px #ccc, 0 0 10px #111, 0 0 20px #111"
     },
     goldFont: {
-        color: '#fff',
-        textShadow: "0 0 1px #fff, 0 0 2px #fff, 0 0 15px #b3b300, 0 0 20px #b3b300, 0 0 25px #b3b300"
+        color: '#fffbeb',
+        textShadow: "0 0 2px #ffffcc, 0 0 10px #ffcc00, 0 0 15px #ffcc00, 0 0 20px #ffcc00"
     },
     epicFont: {
         color: '#fff',
-        textShadow: "0 0 2px #fff, 0 0 3px #fff, 0 0 15px #e600e6, 0 0 20px #e600e6, 0 0 25px #e600e6, 0 0 30px #e600e6"
+        textShadow: "0 0 1px #fff, 0 0 3px #fff, 0 0 5px #ff80ff, 0 0 10px #ff80ff, 0 0 15px #ff80ff, 0 0 20px #ff80ff"
     },
     legendFont: {
-        color: '#ededed',
-        textShadow: "0 0 2px #fff, 0 0 4px #fff, 0 0 15px #8c1aff, 0 0 20px #8c1aff"
+        color: '#fff',
+        textShadow: "0 0 1px #fff, 0 0 3px #00e6e6, 0 0 15px #00e6e6, 0 0 20px #00e6e6"
     }
 }
 
@@ -69,34 +70,42 @@ export const AddBaseCard = () => (
                             </Row>
                             <Row>
                                 <Col sm={12} md={6} lg={4}>
-                                    <ButtonToolbar style={{margin: '10px'}}>
-                                        <ButtonGroup>
-                                            <Button onClick={() => (context.handleRarity(TemplateSilver, style.silverFont))} variant="outline-secondary">Silver</Button> 
-                                            <Button onClick={() => (context.handleRarity(TemplateGold, style.goldFont))} variant="outline-secondary">Gold</Button> 
-                                            <Button onClick={() => (context.handleRarity(TemplateEpic, style.epicFont))} variant="outline-secondary">Epic</Button> 
-                                            <Button variant="outline-secondary">Legend</Button>
-                                        </ButtonGroup>
-                                    </ButtonToolbar>
+                                    <ButtonGroup style={{margin: '10px 0'}}>
+                                        <Button onClick={() => (context.handleRarity(1, TemplateSilver, style.silverFont))} variant="outline-secondary">Silver</Button> 
+                                        <Button onClick={() => (context.handleRarity(2, TemplateGold, style.goldFont))} variant="outline-secondary">Gold</Button> 
+                                        <Button onClick={() => (context.handleRarity(3, TemplateEpic, style.epicFont))} variant="outline-secondary">Epic</Button> 
+                                        <Button onClick={() => (context.handleRarity(4, TemplateLegend, style.legendFont))} variant="outline-secondary">Legend</Button>
+                                    </ButtonGroup>
+
                                     <div style={style.sakataCard} ref={context.sakataCardRef}>
                                         <Image src={context.rarity.template} style={{
                                             backgroundImage: `url(${context.picture})`,
                                             backgroundPosition: 'center',
                                             backgroundRepeat: 'no-repeat',
                                             backgroundSize: 'cover',
-                                            height: '400px'
+                                            height: '330px',
                                         }} rounded/>
-                                        <div style={{...context.rarity.fontStyle, ...style.overallPower}}>81</div>
+                                        <div style={{...context.rarity.fontStyle, ...style.overallPower}}>
+                                            {context.overallPower}
+                                        </div>
                                         <div style={{...context.rarity.fontStyle, ...style.name}}>
                                             <span>{context.character.name}</span>
                                         </div>
                                     </div>
-                                    
-                                    <Button variant="outline-secondary"
-                                        onClick={() => context.saveCardAsPng()}
-                                        style={{marginTop: '25px', marginLeft: '25%'}}
-                                    >
-                                        Save Card
-                                    </Button>
+
+                                    <ButtonGroup style={{margin: '10px 0'}}>
+                                        <Button variant="outline-secondary"
+                                            onClick={() => context.generateOverallPower()}
+                                        >
+                                            Generate Overall
+                                        </Button>
+                                        <Button variant="outline-secondary"
+                                            onClick={() => context.saveCardAsPng()}
+                                            style={{}}
+                                        >
+                                            Save Card
+                                        </Button>
+                                    </ButtonGroup>
                                 </Col>
                                 <Col xs={6}>
                                     <InputGroup>
@@ -109,6 +118,25 @@ export const AddBaseCard = () => (
                                             onChange={context.handlePicture}    
                                         />
                                     </InputGroup>
+                                    <br/>
+                                    <p>Select valid animes for this character or nothing for a auto generated overall power</p>
+
+                                    <ListGroup as="ul">
+                                        { context.character.animeography.map((anime) => (
+                                            <ListGroup.Item key={anime.mal_id}
+                                                variant={context.selectedAnimes.includes(anime) ? "primary" : ""}
+                                                style={{cursor: 'pointer'}}
+                                                onClick={() => context.selectAnime(anime)}
+                                            >
+                                                <Image 
+                                                    src={anime.image_url} 
+                                                    style={{height: '120px', marginRight:'15px'}}
+                                                    thumbnail 
+                                                />
+                                                {anime.name}
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
                                 </Col>
                             </Row>
                         </Container>
