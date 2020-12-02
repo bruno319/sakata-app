@@ -13,9 +13,9 @@ const AddBaseCardProvider = component => {
     const [character, setCharacter] = useState({});
     const [selectedAnimes, setSelectedAnimes] = useState([]);
     const [picture, setPicture] = useState("");
-    const [loading, setLoading] = useState(true);
     const [baseOverallPower, setBaseOverallPower] = useState(0);
     const [overallPower, setOverallPower] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
     const [rarity, setRarity] = useState({
         value: 1,
         template: TemplateSilver,
@@ -45,19 +45,20 @@ const AddBaseCardProvider = component => {
         setSelectedAnimes(animes);
     };
     
-    useEffect(() => {
-        const fetchCharacterData = async () => {
-            if (malId) {
-                const response = await fetch(`https://api.jikan.moe/v3/character/${malId}`);
-                const json = await response.json();
-                setCharacter(json);
-                setPicture(json.image_url);
-            }
-            setLoading(false);
+    const fetchCharacterData = async () => {
+        setIsLoading(true);
+        if (malId) {
+            const response = await fetch(`https://api.jikan.moe/v3/character/${malId}`);
+            const character = await response.json();
+            setCharacter(character);
+            setPicture(character.image_url);
         }
+        setIsLoading(false);
+    }
 
-        return fetchCharacterData();
-    }, [malId]);
+    useEffect(() => {
+        fetchCharacterData();
+    }, []);
 
     useEffect(() => {
         let newOverallPower = 0;
@@ -74,25 +75,22 @@ const AddBaseCardProvider = component => {
     }, [rarity, baseOverallPower])
  
     const generateOverallPower = async () => {
-        const fetchOverallPower = async () => {
-            if (malId) {
-                const reqOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        animeMalIds: selectedAnimes.map(a => a.mal_id) 
-                    })
-                };
-                fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/overall-power/${malId}`, reqOptions)
-                    .then(res => res.json())
-                    .then(data => setBaseOverallPower(data.overallPower))
-                    .catch(e => console.error(e));
-                
-            }
+        setIsLoading(true);
+        if (malId) {
+            const reqOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    animeMalIds: selectedAnimes.map(a => a.mal_id) 
+                })
+            };
+            const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/overall-power/${malId}`, reqOptions);
+            const data = await res.json();
+            setBaseOverallPower(data.overallPower);
         }
-        await fetchOverallPower();
+        setIsLoading(false);
     }
 
     const saveCardAsPng = () => {
@@ -106,7 +104,7 @@ const AddBaseCardProvider = component => {
     return (
         <AddBaseCardContext.Provider
             value={{
-                loading,
+                isLoading,
                 character,
                 overallPower,
                 picture,

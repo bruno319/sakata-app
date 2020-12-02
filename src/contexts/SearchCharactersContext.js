@@ -1,33 +1,39 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
 
-const SearchCharacterContext = React.createContext({});
+const SearchCharactersContext = React.createContext({});
 
-const SearchCharacterProvider = component => {
-    const [malId, setMalId] = useState("");
-    const [characters, setCharacters] = useState([]);
+const SearchCharactersProvider = component => {
+    const location = useLocation();
+    const [animeTitle, setAnimeTitle] = useState("");
+    const [animes, setAnimes] = useState([]);
 
-    const handleMalId = event => {
-        setMalId(event.target.value)
+    const handleAnimeTitle = event => {
+        setAnimeTitle(event.target.value)
     };
 
-    const fetchCharacters = async () => {
-        const res = await fetch(`https://api.jikan.moe/v3/anime/${malId}/characters_staff`);
-        res.json()
-          .then(res => setCharacters(res.characters));
+    const fetchAnimes = async () => {
+        fetch(`https://api.jikan.moe/v3/search/anime?q=${animeTitle}`)
+            .then(res => res.json())
+            .then(res => setAnimes(res.results));
     }
 
+    useEffect(() => {
+        console.log(location.state)
+    }, [location]);
+
     return (
-        <SearchCharacterContext.Provider
+        <SearchCharactersContext.Provider
             value={{
-                malId,
-                handleMalId,
-                characters,
-                fetchCharacters
+                animeTitle,
+                handleAnimeTitle,
+                animes,
+                fetchAnimes
             }}
         >
             {component.children}
-        </SearchCharacterContext.Provider>
+        </SearchCharactersContext.Provider>
     );
 };
 
-export {SearchCharacterContext, SearchCharacterProvider};
+export {SearchCharactersContext, SearchCharactersProvider};

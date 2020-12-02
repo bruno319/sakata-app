@@ -1,39 +1,39 @@
 import { Container, InputGroup, FormControl, Button, Col, ListGroup, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { SearchCharacterProvider, SearchCharacterContext } from '../contexts/SearchCharactersContext';
+import { SearchCharactersProvider, SearchCharactersContext } from '../contexts/SearchCharactersContext';
 
 export const SearchCharacter = () => (
-    <SearchCharacterProvider>
-        <SearchCharacterContext.Consumer> 
+    <SearchCharactersProvider>
+        <SearchCharactersContext.Consumer> 
             { (context) => (
                 <Container>
                     <Col md={{span: 8, offset: 2}}>
-                        <h1>Search Characters By MAL ID</h1>
+                        <h1>Search Characters By Anime</h1>
                         <InputGroup className="mb-3">
                             <FormControl 
-                                placeholder="MAL ID"
+                                placeholder="Anime Title"
                                 value={context.animeTitle}
-                                onChange={context.handleMalId}    
+                                onChange={context.handleAnimeTitle}    
                             />
                             <InputGroup.Append>
                                 <Button 
                                     variant="outline-secondary"
-                                    onClick={context.fetchCharacters}
+                                    onClick={context.fetchAnimes}
                                 >
                                     Search
                                 </Button>
                             </InputGroup.Append>    
                         </InputGroup>
                         <ListGroup>
-                            { context.characters.map((char) => (
-                                <Link key={char.mal_id} to={`/addbasecard/${char.mal_id}`}>
+                            { context.animes.map((anime) => (
+                                <Link key={anime.mal_id} to={`/anime/${anime.mal_id}`}>
                                     <ListGroup.Item style={{cursor: 'pointer'}}>
                                         <Image 
-                                            src={char.image_url} 
+                                            src={anime.image_url} 
                                             style={{height: '150px', marginRight:'15px'}} 
                                             thumbnail 
                                         />
-                                        {`${char.name} [${char.mal_id}]`}
+                                        {`${anime.title} [${anime.mal_id}]`}
                                     </ListGroup.Item>
                                 </Link>
                             ))}
@@ -41,6 +41,6 @@ export const SearchCharacter = () => (
                     </Col>
                 </Container>
             )} 
-        </SearchCharacterContext.Consumer>
-    </SearchCharacterProvider>
+        </SearchCharactersContext.Consumer>
+    </SearchCharactersProvider>
 );
