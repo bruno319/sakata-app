@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Col, Container, FormControl, Image, InputGroup, ListGroup, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, FormControl, Image, InputGroup, ListGroup, Row, ToggleButton } from "react-bootstrap";
 import { AddBaseCardContext, AddBaseCardProvider } from "../contexts/AddBaseCardsContext";
 import TemplateSilver from '../resources/sakata-template-common.png';
 import TemplateEpic from '../resources/sakata-template-epic.png';
@@ -71,6 +71,18 @@ export const style = {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column-reverse'
+    },
+    iconGenre: {
+        position: 'absolute',
+        height: '45px',
+        bottom: '5.23rem',
+        left: '0px'
+    },
+    iconClass: {
+        position: 'absolute',
+        height: '45px',
+        bottom: '129px',
+        left: '0px'
     }
 }
 
@@ -78,56 +90,95 @@ export const AddBaseCard = () => (
     <AddBaseCardProvider>
         <AddBaseCardContext.Consumer>
             { (context) => (
-                <Container>
+                <>
                     {context.isLoading ? (
                         <div style={style.loaderDiv}>
                             <h2>Performing expensive operations xD</h2><br/>
                             <CubeSpinner size={70} loading={true}/>
                         </div>
                     ) : (
+                        <>
                         <Container>
                             <Row>
                                 <Col sm={12} md={6} lg={4}>
                                     <h1>Card Overview</h1>
-
-                                    <ButtonGroup style={{margin: '10px 0'}}>
-                                        <Button onClick={() => (context.handleRarity(1, TemplateSilver, style.silverFont))} variant="outline-secondary">Silver</Button> 
-                                        <Button onClick={() => (context.handleRarity(2, TemplateGold, style.goldFont))} variant="outline-secondary">Gold</Button> 
-                                        <Button onClick={() => (context.handleRarity(3, TemplateEpic, style.epicFont))} variant="outline-secondary">Epic</Button> 
-                                        <Button onClick={() => (context.handleRarity(4, TemplateLegend, style.legendFont))} variant="outline-secondary">Legend</Button>
-                                    </ButtonGroup>
-
-                                    <div style={style.sakataCard} ref={context.sakataCardRef}>
-                                        <span style={style.malId}>{context.character.mal_id}</span>
-                                        <Image src={context.rarity.template} style={{
-                                            backgroundImage: `url(${context.picture})`,
-                                            backgroundPosition: 'center',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundSize: 'cover',
-                                            height: '330px',
-                                        }} rounded/>
-                                        <div style={{...context.rarity.fontStyle, ...style.overallPower}}>
-                                            {context.overallPower}
-                                        </div>
-                                        <div style={{...context.rarity.fontStyle, ...style.name}}>
-                                            <span>{context.character.name}</span>
-                                        </div>
-                                    </div>
-
-                                    <ButtonGroup style={{margin: '10px 0'}}>
-                                        <Button variant="outline-secondary"
-                                            onClick={() => context.generateOverallPower()}
-                                        >
-                                            Generate Overall
-                                        </Button>
-                                        <Button variant="outline-secondary"
-                                            onClick={() => context.saveCardAsPng()}
-                                            style={{}}
-                                        >
-                                            Save Card
-                                        </Button>
-                                    </ButtonGroup>
                                 </Col>
+                            </Row>
+                            <Row>
+                                <Col sm={12} md={6} lg={4}>
+
+                                    <Row>
+                                        <ButtonGroup style={{margin: '10px 0'}}>
+                                            <Button onClick={() => (context.handleRarity(1, TemplateSilver, style.silverFont))} variant="outline-secondary">Silver</Button> 
+                                            <Button onClick={() => (context.handleRarity(2, TemplateGold, style.goldFont))} variant="outline-secondary">Gold</Button> 
+                                            <Button onClick={() => (context.handleRarity(3, TemplateEpic, style.epicFont))} variant="outline-secondary">Epic</Button> 
+                                            <Button onClick={() => (context.handleRarity(4, TemplateLegend, style.legendFont))} variant="outline-secondary">Legend</Button>
+                                        </ButtonGroup>
+
+                                        <div style={style.sakataCard} ref={context.sakataCardRef}>
+                                            <img src={context.selectedClass.path} style={style.iconClass}/>
+                                            <img src={context.selectedGenre.path} style={style.iconGenre}/>
+                                            <span style={style.malId}>{context.character.mal_id}</span>
+                                            <Image src={context.rarity.template} style={{
+                                                backgroundImage: `url(${context.picture})`,
+                                                backgroundPosition: 'center',
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundSize: 'cover',
+                                                height: '330px',
+                                            }} rounded/>
+                                            <div style={{...context.rarity.fontStyle, ...style.overallPower}}>
+                                                {context.overallPower}
+                                            </div>
+                                            <div style={{...context.rarity.fontStyle, ...style.name}}>
+                                                <span>{context.character.name}</span>
+                                            </div>
+                                        </div>
+
+                                        <ButtonGroup style={{margin: '10px 0'}}>
+                                            <Button variant="outline-secondary" onClick={() => context.generateOverallPower()}>
+                                                Generate Overall
+                                            </Button>
+                                            <Button variant="outline-secondary" onClick={() => context.saveCardAsPng()}>
+                                                Save Card
+                                            </Button>
+                                        </ButtonGroup>
+                                    
+                                    </Row>
+
+                                    <Row>
+                                        <ButtonGroup toggle vertical>
+                                            {context.classes.map(c => (
+                                                <ToggleButton
+                                                    key={c.value}
+                                                    type="radio"
+                                                    variant="outline-secondary"
+                                                    value={c.value}
+                                                    checked={context.selectedClass.value === c.value}
+                                                    onChange={context.handleClass}
+                                                >
+                                                    {c.name}
+                                                </ToggleButton>
+                                            ))}
+                                        </ButtonGroup>
+
+                                        <ButtonGroup toggle vertical>
+                                            {context.genres.map(g => (
+                                                <ToggleButton
+                                                    key={g.value}
+                                                    type="radio"
+                                                    variant="outline-secondary"
+                                                    value={g.value}
+                                                    checked={context.selectedGenre.value === g.value}
+                                                    onChange={context.handleGenre}
+                                                >
+                                                    {g.name}
+                                                </ToggleButton>
+                                            ))}
+                                        </ButtonGroup>
+                                    </Row>
+                                    
+                                </Col>
+
                                 <Col xs={6} style={{marginTop: '20px'}}>
                                     <InputGroup>
                                         <InputGroup.Prepend>
@@ -139,6 +190,7 @@ export const AddBaseCard = () => (
                                             onChange={context.handlePicture}    
                                         />
                                     </InputGroup>
+
                                     <br/>
                                     <p>Select valid animes for this character or nothing for a auto generated overall power</p>
 
@@ -161,8 +213,9 @@ export const AddBaseCard = () => (
                                 </Col>
                             </Row>
                         </Container>
+                        </>
                     )}
-                </Container>
+                </>
             )}
         </AddBaseCardContext.Consumer>
     </AddBaseCardProvider>
