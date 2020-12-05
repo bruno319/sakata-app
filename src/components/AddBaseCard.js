@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Col, Container, FormControl, Image, InputGroup, ListGroup, Row, ToggleButton } from "react-bootstrap";
+import { Alert, Button, ButtonGroup, Col, Container, FormControl, Image, InputGroup, ListGroup, Row, ToggleButton } from "react-bootstrap";
 import { AddBaseCardContext, AddBaseCardProvider } from "../contexts/AddBaseCardsContext";
 import TemplateSilver from '../resources/sakata-template-common.png';
 import TemplateEpic from '../resources/sakata-template-epic.png';
@@ -91,7 +91,7 @@ export const AddBaseCard = () => (
         <AddBaseCardContext.Consumer>
             { (context) => (
                 <>
-                    {context.isLoading ? (
+                    { context.isLoading ? (
                         <div style={style.loaderDiv}>
                             <h2>Performing expensive operations xD</h2><br/>
                             <CubeSpinner size={70} loading={true}/>
@@ -99,6 +99,15 @@ export const AddBaseCard = () => (
                     ) : (
                         <>
                         <Container>
+                            { context.alert.show && 
+                                <Alert variant="danger" 
+                                    onClose={() => context.setAlert({show: false, message: ''})} 
+                                    dismissible
+                                >
+                                    {context.alert.message}
+                                </Alert>
+                            }
+
                             <Row>
                                 <Col sm={12} md={6} lg={4}>
                                     <h1>Card Overview</h1>
@@ -123,9 +132,9 @@ export const AddBaseCard = () => (
                                                 backgroundImage: `url(${context.picture})`,
                                                 backgroundPosition: 'center',
                                                 backgroundRepeat: 'no-repeat',
-                                                backgroundSize: 'cover',
+                                                backgroundSize: '90%',
                                                 height: '330px',
-                                            }} rounded/>
+                                            }} />
                                             <div style={{...context.rarity.fontStyle, ...style.overallPower}}>
                                                 {context.overallPower}
                                             </div>
@@ -136,10 +145,10 @@ export const AddBaseCard = () => (
 
                                         <ButtonGroup style={{margin: '10px 0'}}>
                                             <Button variant="outline-secondary" onClick={() => context.generateOverallPower()}>
-                                                Generate Overall
+                                                Create Card
                                             </Button>
-                                            <Button variant="outline-secondary" onClick={() => context.saveCardAsPng()}>
-                                                Save Card
+                                            <Button variant="outline-secondary" onClick={() => context.generateJpegCard()}>
+                                                Generate Image
                                             </Button>
                                         </ButtonGroup>
                                     
@@ -179,7 +188,7 @@ export const AddBaseCard = () => (
                                     
                                 </Col>
 
-                                <Col xs={6} style={{marginTop: '20px'}}>
+                                <Col sm={12} md={6} lg={8}>
                                     <InputGroup>
                                         <InputGroup.Prepend>
                                             <InputGroup.Text>Picture Url</InputGroup.Text>

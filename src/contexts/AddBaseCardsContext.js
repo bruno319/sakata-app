@@ -23,6 +23,9 @@ import SciFiGenre from '../resources/genre-scifi.png';
 import SliceOfLifeGenre from '../resources/genre-sliceoflife.png';
 import SportsGenre from '../resources/genre-sports.png';
 import TemplateSilver from '../resources/sakata-template-common.png';
+import TemplateEpic from '../resources/sakata-template-epic.png';
+import TemplateGold from '../resources/sakata-template.png';
+import TemplateLegend from '../resources/sakata-legend.png';
 
 const classes = [
     { name: 'Fighter', value: '1' },
@@ -62,6 +65,7 @@ const AddBaseCardProvider = component => {
     const [selectedClass, setselectedClass] = useState({});
     const [selectedGenre, setSelectedGenre] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [alert, setAlert] = useState({show: false, message: ''});
     const [rarity, setRarity] = useState({
         value: 1,
         template: TemplateSilver,
@@ -170,6 +174,12 @@ const AddBaseCardProvider = component => {
     }, []);
 
     useEffect(() => {
+        if (baseOverallPower) {
+            saveCard();
+        }
+    }, [baseOverallPower]);
+
+    useEffect(() => {
         let newOverallPower = 0;
         if (rarity.value === 1) {
             newOverallPower = baseOverallPower
@@ -181,9 +191,23 @@ const AddBaseCardProvider = component => {
             newOverallPower = baseOverallPower + 5
         };
         setOverallPower(newOverallPower);
-    }, [rarity, baseOverallPower])
+    }, [rarity, baseOverallPower]);
  
     const generateOverallPower = async () => {
+        if (Object.keys(selectedGenre).length === 0 || Object.keys(selectedClass).length === 0) {
+            setAlert({
+                show: true,
+                message: 'Select class and genre for this character'
+            });
+            return () => {};
+        }
+        if (character.animeography.length > 5 && selectedAnimes.length === 0) {
+            setAlert({
+                show: true,
+                message: 'This character has many animes, select some from the list'
+            });
+            return () => {};
+        }
         setIsLoading(true);
         if (malId) {
             const reqOptions = {
@@ -192,21 +216,45 @@ const AddBaseCardProvider = component => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    animeMalIds: selectedAnimes.map(a => a.mal_id) 
+                    anime_mal_ids: selectedAnimes.map(a => a.mal_id) 
                 })
             };
-            const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/overall-power/${malId}`, reqOptions);
-            const data = await res.json();
-            setBaseOverallPower(data.overallPower);
+            try {
+                const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/overall-power/${malId}`, reqOptions);
+                const data = await res.json();
+                setBaseOverallPower(data.overallPower);
+            } catch (err) {
+                setAlert({
+                    show: true,
+                    message: `Could not save card: ${err}`
+                });
+            }
         }
         setIsLoading(false);
     }
 
-    const saveCardAsPng = () => {
+    const saveCard = async () => {
+        const reqOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: character.name,
+                class: parseInt(selectedClass.value, 10),
+                genre: parseInt(selectedGenre.value, 10),
+                mal_id: parseInt(malId),
+                overall_power: baseOverallPower
+            })
+        };
+        console.log(reqOptions.body);
+        return await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards`, reqOptions);
+    }
+
+    const generateJpegCard = () => {
         HtmlToImage.toJpeg(sakataCardRef.current, { quality: 0.95 })
             .then((dataUrl) => {
-                console.log(dataUrl);
-                download(dataUrl, `${character.mal_id}[${rarity.value}].jpeg`);
+                download(dataUrl, `sakata_${character.mal_id}[${rarity.value}].jpeg`);
             })
     }
 
@@ -229,8 +277,10 @@ const AddBaseCardProvider = component => {
                 selectAnime,
                 selectedAnimes,
                 generateOverallPower,
+                alert,
+                setAlert,
                 sakataCardRef,
-                saveCardAsPng,
+                generateJpegCard,
             }}
         >
             {component.children}
