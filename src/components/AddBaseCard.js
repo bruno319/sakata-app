@@ -9,8 +9,8 @@ import { CubeSpinner } from "react-spinners-kit";
 export const style = {
     sakataCard: {
         position: 'relative',
-        height: '328px',
-        width: '242px'
+        height: '290px',
+        width: '212px'
     },
     malId: {
         position: 'absolute',
@@ -26,8 +26,8 @@ export const style = {
         position: 'absolute',
         bottom: '0px',
         left: '1px',
-        height: '85px',
-        width: '85px',
+        height: '80px',
+        width: '77px',
         lineHeight: '1',
         textAlign: 'center',
         fontSize: '70px',
@@ -39,7 +39,7 @@ export const style = {
         alignItems: 'center',
         justifyContent: 'center',
         bottom: '0px',
-        left: '97px',
+        left: '75px',
         fontSize: '26px',
         fontFamily: 'Jockey One',
         textAlign: 'center',
@@ -133,7 +133,7 @@ export const AddBaseCard = () => (
                                                 backgroundPosition: 'center',
                                                 backgroundRepeat: 'no-repeat',
                                                 backgroundSize: '90%',
-                                                height: '330px',
+                                                height: '290px',
                                             }} />
                                             <div style={{...context.rarity.fontStyle, ...style.overallPower}}>
                                                 {context.overallPower}

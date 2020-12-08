@@ -222,7 +222,7 @@ const AddBaseCardProvider = component => {
             try {
                 const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/overall-power/${malId}`, reqOptions);
                 const data = await res.json();
-                setBaseOverallPower(data.overallPower);
+                setBaseOverallPower(data.overall_power);
             } catch (err) {
                 setAlert({
                     show: true,
@@ -253,8 +253,17 @@ const AddBaseCardProvider = component => {
 
     const generateJpegCard = () => {
         HtmlToImage.toJpeg(sakataCardRef.current, { quality: 0.95 })
-            .then((dataUrl) => {
-                download(dataUrl, `sakata_${character.mal_id}[${rarity.value}].jpeg`);
+            .then(async (dataUrl) => {
+                const filename = `sakata_${character.mal_id}[${rarity.value}].jpeg`;
+                const base64Response = await fetch(dataUrl);
+                const blob = await base64Response.blob();
+                const formData = new FormData();
+                formData.append("basecard", blob, filename);
+                fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/image`, {
+                  method: 'POST',
+                  body: formData
+                });
+                download(dataUrl, filename);
             })
     }
 
