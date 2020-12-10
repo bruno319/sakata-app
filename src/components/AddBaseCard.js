@@ -1,8 +1,8 @@
 import { Alert, Button, ButtonGroup, Col, Container, FormControl, Image, InputGroup, ListGroup, Row, ToggleButton } from "react-bootstrap";
 import { AddBaseCardContext, AddBaseCardProvider } from "../contexts/AddBaseCardsContext";
-import TemplateSilver from '../resources/sakata-template-common.png';
-import TemplateEpic from '../resources/sakata-template-epic.png';
-import TemplateGold from '../resources/sakata-template.png';
+import TemplateSilver from '../resources/sakata-silver.png';
+import TemplateEpic from '../resources/sakata-epic.png';
+import TemplateGold from '../resources/sakata-gold.png';
 import TemplateLegend from '../resources/sakata-legend.png';
 import { CubeSpinner } from "react-spinners-kit";
 
@@ -18,19 +18,18 @@ export const style = {
         right: '0',
         padding: '2px',
         lineHeight: '0.7',
-        fontSize: '13px',
+        fontSize: '14px',
         fontFamily: 'Helvetica',
         fontWeight: 'bold'
     },
     overallPower: {
         position: 'absolute',
-        bottom: '0px',
-        left: '1px',
+        bottom: '22px',
+        left: '5px',
         height: '80px',
         width: '77px',
-        lineHeight: '1',
         textAlign: 'center',
-        fontSize: '70px',
+        fontSize: '65px',
         fontFamily: 'Jockey One'
     },
     name: {
@@ -39,27 +38,27 @@ export const style = {
         alignItems: 'center',
         justifyContent: 'center',
         bottom: '0px',
-        left: '75px',
-        fontSize: '26px',
-        fontFamily: 'Jockey One',
+        left: '95px',
+        fontSize: '24px',
+        fontFamily: 'Yanone Kaffeesatz',
         textAlign: 'center',
         verticalAlign: 'middle',
         letterSpacing: '0px',
         lineHeight: '0.8',
-        width: '138px',
-        height: '62px',
+        width: '111px',
+        height: '69px',
     },
     silverFont: {
-        color: '#ebebeb',
-        textShadow: "0 0 2px #ccc, 0 0 3px #ccc, 0 0 10px #111, 0 0 20px #111"
+        color: '#fff',
+        textShadow: "0 0 1px #ccc, 0 0 3px #ccc, 0 0 10px #111, 0 0 20px #111"
     },
     goldFont: {
         color: '#fffbeb',
-        textShadow: "0 0 2px #ffffcc, 0 0 10px #ffcc00, 0 0 15px #ffcc00, 0 0 20px #ffcc00"
+        textShadow: "0 0 1px #fff, 0 0 7px #e6b800, 0 0 12px #e6b800"
     },
     epicFont: {
         color: '#fff',
-        textShadow: "0 0 1px #fff, 0 0 2px #fff, 0 0 15px #ff80ff, 0 0 20px #ff80ff"
+        textShadow: "0 0 1px #fff, 0 0 3px #ff80ff, 0 0 15px #ff80ff, 0 0 20px #ff80ff"
     },
     legendFont: {
         color: '#fff',
@@ -74,14 +73,14 @@ export const style = {
     },
     iconGenre: {
         position: 'absolute',
-        height: '45px',
-        bottom: '5.23rem',
+        height: '50px',
+        bottom: '5.59rem',
         left: '0px'
     },
     iconClass: {
         position: 'absolute',
-        height: '45px',
-        bottom: '129px',
+        height: '50px',
+        bottom: '139px',
         left: '0px'
     }
 }
@@ -132,7 +131,7 @@ export const AddBaseCard = () => (
                                                 backgroundImage: `url(${context.picture})`,
                                                 backgroundPosition: 'center',
                                                 backgroundRepeat: 'no-repeat',
-                                                backgroundSize: '90%',
+                                                backgroundSize: '82%',
                                                 height: '290px',
                                             }} />
                                             <div style={{...context.rarity.fontStyle, ...style.overallPower}}>

@@ -22,10 +22,7 @@ import RomanceGenre from '../resources/genre-romance.png';
 import SciFiGenre from '../resources/genre-scifi.png';
 import SliceOfLifeGenre from '../resources/genre-sliceoflife.png';
 import SportsGenre from '../resources/genre-sports.png';
-import TemplateSilver from '../resources/sakata-template-common.png';
-import TemplateEpic from '../resources/sakata-template-epic.png';
-import TemplateGold from '../resources/sakata-template.png';
-import TemplateLegend from '../resources/sakata-legend.png';
+import TemplateSilver from '../resources/sakata-silver.png';
 
 const classes = [
     { name: 'Fighter', value: '1' },
@@ -254,7 +251,7 @@ const AddBaseCardProvider = component => {
     const generateJpegCard = () => {
         HtmlToImage.toJpeg(sakataCardRef.current, { quality: 0.95 })
             .then(async (dataUrl) => {
-                const filename = `sakata_${character.mal_id}[${rarity.value}].jpeg`;
+                const filename = `sakata_${character.mal_id}_${rarity.value}.jpeg`;
                 const base64Response = await fetch(dataUrl);
                 const blob = await base64Response.blob();
                 const formData = new FormData();
