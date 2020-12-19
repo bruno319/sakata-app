@@ -10,8 +10,33 @@ const AnimeCharactersProvider = component => {
     useEffect(() => {
         const fetchCharacters = async () => {
             const res = await fetch(`https://api.jikan.moe/v3/anime/${malId}/characters_staff`);
-            res.json()
-              .then(res => setCharacters(res.characters));
+            const charactersResult = await res.json();
+
+            const malIdList = charactersResult.characters.map(c => c.mal_id);
+            const charactersCreated = await verifyCardsCreated(malIdList);
+
+            const characters = charactersResult.characters.map(c => {
+                if (charactersCreated.includes(c.mal_id)) {
+                    c.created = true;
+                } else {
+                    c.created = false;
+                }
+                return c;
+            });
+
+            setCharacters(characters);
+        };
+        
+        const verifyCardsCreated = async (malIdList) => {
+            const reqOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(malIdList)
+            };
+            const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/inserted`, reqOptions);
+            return await res.json();
         };
 
         fetchCharacters();

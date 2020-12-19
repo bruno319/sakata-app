@@ -1,10 +1,10 @@
 import { Container, InputGroup, FormControl, Button, Col, ListGroup, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { SearchCharactersProvider, SearchCharactersContext } from '../contexts/SearchCharactersContext';
+import { SearchAnimeProvider, SearchAnimeContext } from '../contexts/SearchAnimeContext';
 
-export const SearchCharacter = () => (
-    <SearchCharactersProvider>
-        <SearchCharactersContext.Consumer> 
+export const SearchAnime = () => (
+    <SearchAnimeProvider>
+        <SearchAnimeContext.Consumer> 
             { (context) => (
                 <Container>
                     <Col md={{span: 8, offset: 2}}>
@@ -41,6 +41,6 @@ export const SearchCharacter = () => (
                     </Col>
                 </Container>
             )} 
-        </SearchCharactersContext.Consumer>
-    </SearchCharactersProvider>
+        </SearchAnimeContext.Consumer>
+    </SearchAnimeProvider>
 );

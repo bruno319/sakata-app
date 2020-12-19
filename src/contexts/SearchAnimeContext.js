@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import React, {useState} from 'react';
 
-const SearchCharactersContext = React.createContext({});
+const SearchAnimeContext = React.createContext({});
 
-const SearchCharactersProvider = component => {
-    const location = useLocation();
+const SearchAnimeProvider = component => {
     const [animeTitle, setAnimeTitle] = useState("");
     const [animes, setAnimes] = useState([]);
 
@@ -18,12 +16,8 @@ const SearchCharactersProvider = component => {
             .then(res => setAnimes(res.results));
     }
 
-    useEffect(() => {
-        console.log(location.state)
-    }, [location]);
-
     return (
-        <SearchCharactersContext.Provider
+        <SearchAnimeContext.Provider
             value={{
                 animeTitle,
                 handleAnimeTitle,
@@ -32,8 +26,8 @@ const SearchCharactersProvider = component => {
             }}
         >
             {component.children}
-        </SearchCharactersContext.Provider>
+        </SearchAnimeContext.Provider>
     );
 };
 
-export {SearchCharactersContext, SearchCharactersProvider};
+export {SearchAnimeContext, SearchAnimeProvider};
