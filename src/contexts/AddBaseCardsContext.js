@@ -14,14 +14,16 @@ import SupernaturalClass from '../resources/class-supernatural.png';
 import SupportClass from '../resources/class-support.png';
 import SwordsmanClass from '../resources/class-swordsman.png';
 import WorkerClass from '../resources/class-worker.png';
-import ActionGenre from '../resources/genre-action.png';
-import AdventureGenre from '../resources/genre-adventure.png';
-import ComedyGenre from '../resources/genre-comedy.png';
-import MysteryGenre from '../resources/genre-mystery.png';
-import RomanceGenre from '../resources/genre-romance.png';
-import SciFiGenre from '../resources/genre-scifi.png';
-import SliceOfLifeGenre from '../resources/genre-sliceoflife.png';
-import SportsGenre from '../resources/genre-sports.png';
+import RogueClass from '../resources/class-rogue.png';
+import ActionDomain from '../resources/domain-action.png';
+import AdventureDomain from '../resources/domain-adventure.png';
+import ComedyDomain from '../resources/domain-comedy.png';
+import MysteryDomain from '../resources/domain-mystery.png';
+import RomanceDomain from '../resources/domain-romance.png';
+import SciFiDomain from '../resources/domain-scifi.png';
+import SliceOfLifeDomain from '../resources/domain-sliceoflife.png';
+import SportsDomain from '../resources/domain-sports.png';
+import FantasyDomain from '../resources/domain-fantasy.png';
 import TemplateSilver from '../resources/sakata-silver.png';
 
 const classes = [
@@ -29,24 +31,26 @@ const classes = [
     { name: 'Magician', value: '2' },
     { name: 'Swordsman', value: '3' },
     { name: 'Ranger', value: '4' },
-    { name: 'Support', value: '5' },
-    { name: 'Beast', value: '6' },
-    { name: 'Machinist', value: '7' },
-    { name: 'Supernatural', value: '8' },
-    { name: 'Scholar', value: '9' },
-    { name: 'Worker', value: '10' },
-    { name: 'Musician', value: '11' },
+    { name: 'Rogue', value: '5' },
+    { name: 'Support', value: '6' },
+    { name: 'Beast', value: '7' },
+    { name: 'Machinist', value: '8' },
+    { name: 'Supernatural', value: '9' },
+    { name: 'Scholar', value: '10' },
+    { name: 'Worker', value: '11' },
+    { name: 'Musician', value: '12' },
 ];
 
-const genres = [
+const domains = [
     { name: 'Action', value: '1' },
     { name: 'Adventure', value: '2' },
-    { name: 'SciFi', value: '3' },
-    { name: 'Sports', value: '4' },
-    { name: 'Mystery', value: '5' },
-    { name: 'SliceOfLife', value: '6' },
-    { name: 'Comedy', value: '7' },
-    { name: 'Romance', value: '8' },
+    { name: 'Fantasy', value: '3' },
+    { name: 'SciFi', value: '4' },
+    { name: 'Sports', value: '5' },
+    { name: 'Mystery', value: '6' },
+    { name: 'SliceOfLife', value: '7' },
+    { name: 'Comedy', value: '8' },
+    { name: 'Romance', value: '9' },
 ]
 
 const AddBaseCardContext = React.createContext({});
@@ -59,8 +63,8 @@ const AddBaseCardProvider = component => {
     const [picture, setPicture] = useState("");
     const [baseOverallPower, setBaseOverallPower] = useState(0);
     const [overallPower, setOverallPower] = useState(0);
-    const [selectedClass, setselectedClass] = useState({});
-    const [selectedGenre, setSelectedGenre] = useState({});
+    const [selectedClass, setSelectedClass] = useState({});
+    const [selectedDomain, setSelectedDomain] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [alert, setAlert] = useState({show: false, message: ''});
     const [rarity, setRarity] = useState({
@@ -83,64 +87,70 @@ const AddBaseCardProvider = component => {
 
     const handleClass = e => {
         if (e.target.value === '1') {
-            setselectedClass({path: FighterClass, value: e.target.value})
+            setSelectedClass({path: FighterClass, value: e.target.value})
         }
         if (e.target.value === '2') {
-            setselectedClass({path: MagicianClass, value: e.target.value})
+            setSelectedClass({path: MagicianClass, value: e.target.value})
         }
         if (e.target.value === '3') {
-            setselectedClass({path: SwordsmanClass, value: e.target.value})
+            setSelectedClass({path: SwordsmanClass, value: e.target.value})
         }
         if (e.target.value === '4') {
-            setselectedClass({path: RangerClass, value: e.target.value})
+            setSelectedClass({path: RangerClass, value: e.target.value})
         }
         if (e.target.value === '5') {
-            setselectedClass({path: SupportClass, value: e.target.value})
+            setSelectedClass({path: RogueClass, value: e.target.value})
         }
         if (e.target.value === '6') {
-            setselectedClass({path: BeastClass, value: e.target.value})
+            setSelectedClass({path: SupportClass, value: e.target.value})
         }
         if (e.target.value === '7') {
-            setselectedClass({path: MachinistClass, value: e.target.value})
+            setSelectedClass({path: BeastClass, value: e.target.value})
         }
         if (e.target.value === '8') {
-            setselectedClass({path: SupernaturalClass, value: e.target.value})
+            setSelectedClass({path: MachinistClass, value: e.target.value})
         }
         if (e.target.value === '9') {
-            setselectedClass({path: ScholarClass, value: e.target.value})
+            setSelectedClass({path: SupernaturalClass, value: e.target.value})
         }
         if (e.target.value === '10') {
-            setselectedClass({path: WorkerClass, value: e.target.value})
+            setSelectedClass({path: ScholarClass, value: e.target.value})
         }
         if (e.target.value === '11') {
-            setselectedClass({path: MusicianClass, value: e.target.value})
+            setSelectedClass({path: WorkerClass, value: e.target.value})
+        }
+        if (e.target.value === '12') {
+            setSelectedClass({path: MusicianClass, value: e.target.value})
         }
     }
 
-    const handleGenre = e => {
+    const handleDomain  = e => {
         if (e.target.value === '1') {
-            setSelectedGenre({path: ActionGenre, value: e.target.value})
+            setSelectedDomain({path: ActionDomain, value: e.target.value})
         }
         if (e.target.value === '2') {
-            setSelectedGenre({path: AdventureGenre, value: e.target.value})
+            setSelectedDomain({path: AdventureDomain, value: e.target.value})
         }
         if (e.target.value === '3') {
-            setSelectedGenre({path: SciFiGenre, value: e.target.value})
+            setSelectedDomain({path: FantasyDomain, value: e.target.value})
         }
         if (e.target.value === '4') {
-            setSelectedGenre({path: SportsGenre, value: e.target.value})
+            setSelectedDomain({path: SciFiDomain, value: e.target.value})
         }
         if (e.target.value === '5') {
-            setSelectedGenre({path: MysteryGenre, value: e.target.value})
+            setSelectedDomain({path: SportsDomain, value: e.target.value})
         }
         if (e.target.value === '6') {
-            setSelectedGenre({path: SliceOfLifeGenre, value: e.target.value})
+            setSelectedDomain({path: MysteryDomain, value: e.target.value})
         }
         if (e.target.value === '7') {
-            setSelectedGenre({path: ComedyGenre, value: e.target.value})
+            setSelectedDomain({path: SliceOfLifeDomain, value: e.target.value})
         }
         if (e.target.value === '8') {
-            setSelectedGenre({path: RomanceGenre, value: e.target.value})
+            setSelectedDomain({path: ComedyDomain, value: e.target.value})
+        }
+        if (e.target.value === '9') {
+            setSelectedDomain({path: RomanceDomain, value: e.target.value})
         }
     }
 
@@ -191,10 +201,10 @@ const AddBaseCardProvider = component => {
     }, [rarity, baseOverallPower]);
  
     const generateOverallPower = async () => {
-        if (Object.keys(selectedGenre).length === 0 || Object.keys(selectedClass).length === 0) {
+        if (Object.keys(selectedDomain).length === 0 || Object.keys(selectedClass).length === 0) {
             setAlert({
                 show: true,
-                message: 'Select class and genre for this character'
+                message: 'Select class and domain for this character'
             });
             return () => {};
         }
@@ -213,7 +223,7 @@ const AddBaseCardProvider = component => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    anime_mal_ids: selectedAnimes.map(a => a.mal_id) 
+                    animes: selectedAnimes.map(a => a.mal_id) 
                 })
             };
             try {
@@ -239,7 +249,7 @@ const AddBaseCardProvider = component => {
             body: JSON.stringify({
                 name: character.name,
                 class: parseInt(selectedClass.value, 10),
-                genre: parseInt(selectedGenre.value, 10),
+                domain: parseInt(selectedDomain.value, 10),
                 mal_id: parseInt(malId),
                 overall_power: baseOverallPower
             })
@@ -277,9 +287,9 @@ const AddBaseCardProvider = component => {
                 classes,
                 selectedClass,
                 handleClass,
-                genres,
-                selectedGenre,
-                handleGenre,
+                domains,
+                selectedDomain,
+                handleDomain,
                 selectAnime,
                 selectedAnimes,
                 generateOverallPower,

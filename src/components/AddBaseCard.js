@@ -71,7 +71,7 @@ export const style = {
         justifyContent: 'center',
         flexDirection: 'column-reverse'
     },
-    iconGenre: {
+    iconDomain: {
         position: 'absolute',
         height: '50px',
         bottom: '5.59rem',
@@ -125,7 +125,7 @@ export const AddBaseCard = () => (
 
                                         <div style={style.sakataCard} ref={context.sakataCardRef}>
                                             <img src={context.selectedClass.path} style={style.iconClass}/>
-                                            <img src={context.selectedGenre.path} style={style.iconGenre}/>
+                                            <img src={context.selectedDomain.path} style={style.iconDomain}/>
                                             <span style={style.malId}>{context.character.mal_id}</span>
                                             <Image src={context.rarity.template} style={{
                                                 backgroundImage: `url(${context.picture})`,
@@ -170,14 +170,14 @@ export const AddBaseCard = () => (
                                         </ButtonGroup>
 
                                         <ButtonGroup toggle vertical>
-                                            {context.genres.map(g => (
+                                            {context.domains.map(g => (
                                                 <ToggleButton
                                                     key={g.value}
                                                     type="radio"
                                                     variant="outline-secondary"
                                                     value={g.value}
-                                                    checked={context.selectedGenre.value === g.value}
-                                                    onChange={context.handleGenre}
+                                                    checked={context.selectedDomain.value === g.value}
+                                                    onChange={context.handleDomain}
                                                 >
                                                     {g.name}
                                                 </ToggleButton>
