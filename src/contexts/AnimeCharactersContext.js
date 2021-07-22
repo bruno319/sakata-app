@@ -35,7 +35,7 @@ const AnimeCharactersProvider = component => {
                 },
                 body: JSON.stringify(malIdList)
             };
-            const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/inserted`, reqOptions);
+            const res = await fetch(`${process.env.REACT_APP_SAKATA_API_URL}/basecards/created`, reqOptions);
             return await res.json();
         };
 
